@@ -51,6 +51,7 @@ class Filial(models.Model):
                             verbose_name='Nome')
     fone = models.CharField(max_length=15,
                             null=True,
+                            blank=True,
                             verbose_name='Telefone de contato da filial')
     matriz = models.BooleanField(default=False,
                                  verbose_name='É Matriz')
@@ -89,6 +90,7 @@ class ContatoCliente(models.Model):
                             verbose_name='Telefone de contato da filial',
                             null=True)
     data_nascimento = models.DateField(null=True,
+                                       blank=True,
                                        verbose_name="Data de nascimento")
     ativo = models.BooleanField(default=True,
                                 verbose_name='Ativo')
@@ -223,6 +225,7 @@ class Projeto(models.Model):
     data_solicitacao = models.DateField(verbose_name='Data de cadastro')
     tempo_previsao = models.DurationField(verbose_name='Tempo previsto para desenvolvimento')
     data_finalizacao = models.DateField(null=True,
+                                        blank=True,
                                         verbose_name='Data de finalização')
     status_id = models.ForeignKey(StatusProjeto,
                                   on_delete=models.PROTECT)
@@ -264,9 +267,11 @@ class Chamado(models.Model):
                                        on_delete=models.PROTECT)
     data_abertura = models.DateField(verbose_name='Data de cadastro')
     data_finalizacao = models.DateField(null=True,
+                                        blank=True,
                                         verbose_name='Data de finalização')
     projeto_id = models.ForeignKey(Projeto,
                                    null=True,
+                                   blank=True,
                                    on_delete=models.CASCADE)
     prioridade = models.IntegerField(default=0,
                                      verbose_name='Nível de prioridade')
@@ -274,7 +279,7 @@ class Chamado(models.Model):
                                   on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     class Meta:
         db_table = u'chamados'

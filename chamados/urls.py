@@ -5,6 +5,4 @@ from .views import ChamadosViewSet
 router = DefaultRouter()
 router.register(r'', ChamadosViewSet)
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls

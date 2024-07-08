@@ -26,8 +26,8 @@ class FilialAdmin(admin.ModelAdmin):
 @admin.register(ContatoCliente)
 class ContatoClienteAdmin(admin.ModelAdmin):
     list_display = (
-    'id', 'filial_id', 'nome', 'fone', 'data_nascimento', 'ativo', 'solicitante', 'data_cadastro', 'data_alteracao')
-    search_fields = ('nome', 'fone')
+        'id', 'filial_id', 'nome', 'fone', 'data_nascimento', 'ativo', 'solicitante', 'data_cadastro', 'data_alteracao')
+    search_fields = ('__all__',)
     list_filter = ('ativo', 'solicitante', 'data_cadastro')
 
 
@@ -76,7 +76,7 @@ class StatusProjetoAdmin(admin.ModelAdmin):
 @admin.register(Projeto)
 class ProjetoAdmin(admin.ModelAdmin):
     list_display = (
-    'id', 'descricao', 'descricao_resumida', 'data_solicitacao', 'tempo_previsao', 'data_finalizacao', 'status_id')
+        'id', 'descricao', 'descricao_resumida', 'data_solicitacao', 'tempo_previsao', 'data_finalizacao', 'status_id')
     search_fields = ('descricao', 'descricao_resumida')
     list_filter = ('data_solicitacao', 'status_id')
 
@@ -91,8 +91,9 @@ class StatusChamadoAdmin(admin.ModelAdmin):
 @admin.register(Chamado)
 class ChamadoAdmin(admin.ModelAdmin):
     list_display = (
-    'id', 'descricao', 'descricao_resumida', 'subcategoria_id', 'tipo_chamado_id', 'solicitante_id', 'data_abertura',
-    'data_finalizacao', 'projeto_id', 'prioridade', 'status_id')
+        'id', 'descricao', 'descricao_resumida', 'subcategoria_id', 'tipo_chamado_id', 'solicitante_id',
+        'data_abertura',
+        'data_finalizacao', 'projeto_id', 'prioridade', 'status_id')
     search_fields = ('descricao', 'descricao_resumida')
     list_filter = ('data_abertura', 'status_id', 'prioridade')
 
@@ -100,6 +101,6 @@ class ChamadoAdmin(admin.ModelAdmin):
 @admin.register(AlteracaoChamado)
 class AlteracaoChamadoAdmin(admin.ModelAdmin):
     list_display = (
-    'id', 'chamado_id', 'descricao', 'data_cadastro', 'tempo_trabalhado', 'usuario_id', 'tipo_alteracao_id')
+        'id', 'chamado_id', 'descricao', 'data_cadastro', 'tempo_trabalhado', 'usuario_id', 'tipo_alteracao_id')
     search_fields = ('descricao',)
     list_filter = ('data_cadastro', 'tipo_alteracao_id')
