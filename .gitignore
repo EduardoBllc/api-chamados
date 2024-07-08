@@ -1,5 +1,2 @@
-*.pyc
-*.log
-*.txt
 .venv
 .idea
