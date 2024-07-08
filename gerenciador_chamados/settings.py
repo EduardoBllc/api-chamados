@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "chamados.apps.ChamadosConfig"
+    "chamados.apps.ChamadosConfig",
+    "clientes.apps.ClientesConfig",
 ]
 
 MIDDLEWARE = [
