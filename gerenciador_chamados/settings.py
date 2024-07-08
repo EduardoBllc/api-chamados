@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-mxra$_yfg^9_04)w)-^=&)$u9$4(^ucm1ca)n*6vpz&yu8i&^&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.109']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "chamados.apps.ChamadosConfig",
     "clientes.apps.ClientesConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
