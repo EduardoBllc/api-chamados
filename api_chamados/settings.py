@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from decouple import Csv
 from pathlib import Path
 from scripts.manipulacao_arquivo_env import resolve_arquivo_env, solicitar_permissao_execucao
+from scripts.utils import texto_colorido, AMARELO
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,6 +24,10 @@ PASTA_ENVS = None
 ENV = None
 
 config = resolve_arquivo_env(BASE_DIR, PASTA_ENVS, ENV)
+
+if config is None:
+    print(texto_colorido('\nAbortando execucao', AMARELO))
+    exit(0)
 
 SECRET_KEY = config('SECRET_KEY')
 
