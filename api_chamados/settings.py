@@ -9,14 +9,20 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-from decouple import config, Csv
+from decouple import Csv
 from pathlib import Path
+from scripts.manipulacao_arquivo_env import resolve_arquivo_env, solicitar_permissao_execucao
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+
+PASTA_ENVS = None
+ENV = None
+
+config = resolve_arquivo_env(BASE_DIR, PASTA_ENVS, ENV)
 
 SECRET_KEY = config('SECRET_KEY')
 
