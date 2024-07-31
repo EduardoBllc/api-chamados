@@ -9,26 +9,54 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from decouple import config, Csv
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mxra$_yfg^9_04)w)-^=&)$u9$4(^ucm1ca)n*6vpz&yu8i&^&'
+SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
+DESENVOLVIMENTO = config('DESENVOLVIMENTO', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+if DESENVOLVIMENTO:
+    ALLOWED_HOSTS = ['*']
 
+    # Database
+    # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# Application definition
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #     'NAME': 'sistema_chamados',
+        #     'USER': 'postgres',
+        #     'PASSWORD': '20212510',
+        #     'HOST': 'localhost',
+        #     'PORT': '5432',
+        # }
+    }
+
+else:
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=None, cast=Csv())
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT'),
+        }
+    }
 
 INSTALLED_APPS = [
     'jazzmin',
@@ -58,8 +86,7 @@ ROOT_URLCONF = 'api_chamados.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,26 +100,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'api_chamados.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'sistema_chamados',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'p',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    # }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -118,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
