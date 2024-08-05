@@ -3,4 +3,4 @@
 .env
 
 envs/*.env
-!envs/example.env
+!example.env

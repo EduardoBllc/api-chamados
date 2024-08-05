@@ -16,9 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from api_chamados import settings
 
 urlpatterns = [
+    path('contas/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('chamados', include('chamados.urls')),
-    path('contas/', include('django.contrib.auth.urls')),
+    path('utilitarios/', include('utilitarios.urls'))
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

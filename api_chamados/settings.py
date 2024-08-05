@@ -9,9 +9,12 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import os
+
 from decouple import Csv
 from pathlib import Path
-from scripts.manipulacao_arquivo_env import resolve_arquivo_env, solicitar_permissao_execucao
+
+from scripts.gerenciador_envs.get_leitor_env import get_config_env
 from scripts.utils import texto_colorido, AMARELO
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,19 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-PASTA_ENVS = None
-ENV = None
+ENV_CONFIG = get_config_env(BASE_DIR)
 
-config = resolve_arquivo_env(BASE_DIR, PASTA_ENVS, ENV)
-
-if config is None:
+if ENV_CONFIG is None:
     print(texto_colorido('\nAbortando execucao', AMARELO))
     exit(0)
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = ENV_CONFIG('SECRET_KEY')
 
-DEBUG = config('DEBUG', default=False, cast=bool)
-DESENVOLVIMENTO = config('DESENVOLVIMENTO', default=False, cast=bool)
+DEBUG = ENV_CONFIG('DEBUG', default=False, cast=bool)
+DESENVOLVIMENTO = ENV_CONFIG('DESENVOLVIMENTO', default=False, cast=bool)
 
 if DESENVOLVIMENTO:
     ALLOWED_HOSTS = ['*']
@@ -56,16 +56,16 @@ if DESENVOLVIMENTO:
     }
 
 else:
-    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=None, cast=Csv())
+    ALLOWED_HOSTS = ENV_CONFIG('ALLOWED_HOSTS', default=[], cast=Csv())
 
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            'PORT': config('DB_PORT'),
+            'NAME': ENV_CONFIG('DB_NAME'),
+            'USER': ENV_CONFIG('DB_USER'),
+            'PASSWORD': ENV_CONFIG('DB_PASSWORD'),
+            'HOST': ENV_CONFIG('DB_HOST', default='localhost'),
+            'PORT': ENV_CONFIG('DB_PORT', default='5432'),
         }
     }
 
@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     "chamados",
     "clientes",
     "rest_framework",
+    "utilitarios.apps.UtilitariosConfig",
 ]
 
 MIDDLEWARE = [
@@ -146,9 +147,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+}
