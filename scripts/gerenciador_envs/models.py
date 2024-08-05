@@ -42,6 +42,13 @@ class VariavelSettings:
         return f'{self.nome}={self.valor_padrao}'
 
     def verifica_tipo(self, valor):
+        """
+        Executa uma verificação de tipo no valor passado
+        :param valor: Valor a ser verificado
+        :type valor: Any
+        :return: True ou False
+        :rtype: bool
+        """
         if self.tipo == TipoVariavel.String:
             return True
         else:

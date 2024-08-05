@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 
-from decouple import Csv
+from decouple import Csv, config
 from pathlib import Path
 
-from scripts.gerenciador_envs.get_leitor_env import get_config_env
+from scripts.gerenciador_envs.get_leitor_env import verifica_vars_env
 from scripts.utils import texto_colorido, AMARELO
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,16 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-ENV_CONFIG = get_config_env(BASE_DIR)
-
-if ENV_CONFIG is None:
+if not verifica_vars_env(BASE_DIR):
     print(texto_colorido('\nAbortando execucao', AMARELO))
     exit(0)
 
-SECRET_KEY = ENV_CONFIG('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = ENV_CONFIG('DEBUG', default=False, cast=bool)
-DESENVOLVIMENTO = ENV_CONFIG('DESENVOLVIMENTO', default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
+DESENVOLVIMENTO = config('DESENVOLVIMENTO', default=False, cast=bool)
 
 if DESENVOLVIMENTO:
     ALLOWED_HOSTS = ['*']
@@ -56,16 +54,16 @@ if DESENVOLVIMENTO:
     }
 
 else:
-    ALLOWED_HOSTS = ENV_CONFIG('ALLOWED_HOSTS', default=[], cast=Csv())
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': ENV_CONFIG('DB_NAME'),
-            'USER': ENV_CONFIG('DB_USER'),
-            'PASSWORD': ENV_CONFIG('DB_PASSWORD'),
-            'HOST': ENV_CONFIG('DB_HOST', default='localhost'),
-            'PORT': ENV_CONFIG('DB_PORT', default='5432'),
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
         }
     }
 
