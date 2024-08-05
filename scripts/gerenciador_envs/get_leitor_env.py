@@ -1,6 +1,6 @@
 from decouple import config
 
-from scripts.gerenciador_envs.manipulacao_arq_env import altera_variaveis, solicitar_permissao_criacao
+from scripts.gerenciador_envs.manipulacao_arq_env import solicitar_permissao_criacao, adiciona_variaveis
 from scripts.gerenciador_envs.verificacoes import verifica_variaveis, verifica_banco_dados
 from scripts.utils import texto_colorido, AMARELO, VERDE
 
@@ -23,8 +23,8 @@ def verifica_vars_env(diretorio_base, nova_tentativa=False):
 
         resposta = input('(S)im/(N)ao: ')
 
-        if resposta in ('S', 's', 'Sim', 'sim'):
-            if mensagem_erro := altera_variaveis(variaveis_erro, diretorio_base):
+        if resposta.lower() in ('s', 'sim'):
+            if mensagem_erro := adiciona_variaveis(variaveis_erro, diretorio_base):
                 print(mensagem_erro)
                 return False
 
@@ -33,7 +33,7 @@ def verifica_vars_env(diretorio_base, nova_tentativa=False):
         else:
             return False
 
-    if not verifica_banco_dados():
+    if not config('DESENVOLVIMENTO', cast=bool) and not verifica_banco_dados():
         return False
 
     if nova_tentativa:

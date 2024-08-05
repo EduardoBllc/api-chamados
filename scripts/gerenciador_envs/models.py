@@ -53,7 +53,12 @@ class VariavelSettings:
             return True
         else:
             try:
-                if not type(eval(valor)) == self.tipo.value:
+                if not isinstance(eval(valor), self.tipo.value):
+                    if self.tipo == TipoVariavel.List and isinstance(eval(valor), tuple):
+                        return True
+                    return False
+            except SyntaxError:
+                if not self.tipo == TipoVariavel.List:
                     return False
             except NameError:
                 return False

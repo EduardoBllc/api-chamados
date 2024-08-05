@@ -40,11 +40,11 @@ def pede_valor_variavel(variavel, tentativa=1):
 
 
 def altera_variaveis(variaveis, diretorio_base):
-    caminho_arquivo = diretorio_base.join('.env')
+    caminho_arquivo = diretorio_base.joinpath('.env')
 
     linhas = le_arquivo_env(caminho_arquivo)
 
-    if linhas is str:
+    if isinstance(linhas, str):
         return linhas
 
     try:
@@ -69,6 +69,25 @@ def altera_variaveis(variaveis, diretorio_base):
                         return texto_colorido('Numero maximo de tentativas excedido!', VERMELHO)
 
                     file.write(f"{var_faltante}={valor}\n")
+
+    except FileNotFoundError:
+        return texto_colorido(f'Erro ao abrir arquivo {diretorio_base}', VERMELHO)
+    except PermissionError as pe:
+        return texto_colorido(f'Erro de permissao: {pe}', VERMELHO)
+
+    return apaga_linhas_em_branco(caminho_arquivo)
+
+
+def adiciona_variaveis(variaveis, diretorio_base):
+    caminho_arquivo = diretorio_base.joinpath('.env')
+
+    try:
+        with open('.env', 'a') as file:
+            for variavel in variaveis:
+                if valor := pede_valor_variavel(variavel):
+                    file.write(f"{variavel}={valor}\n")
+                else:
+                    return texto_colorido('Numero maximo de tentativas excedido!', VERMELHO)
 
     except FileNotFoundError:
         return texto_colorido(f'Erro ao abrir arquivo {diretorio_base}', VERMELHO)

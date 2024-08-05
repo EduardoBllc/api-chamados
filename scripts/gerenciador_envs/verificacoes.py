@@ -3,10 +3,11 @@ from decouple import UndefinedValueError
 from psycopg2 import connect, OperationalError
 from scripts.gerenciador_envs.variaveis_ambiente import VARIAVEIS_AMBIENTE, VARIAVEIS_PRODUCAO
 from scripts.utils import texto_colorido, VERMELHO
-from decouple import config
+from decouple import AutoConfig
 
 
 def verifica_variaveis():
+    config = AutoConfig()
     desenvolvimento = False
     variaveis_erro = []
 
@@ -35,6 +36,8 @@ def verifica_variaveis():
 
 
 def verifica_banco_dados():
+    config = AutoConfig()
+
     dic_conexao = {
         'dbname': config('DB_NAME'),
         'user': config('DB_USER'),
