@@ -81,9 +81,9 @@ def sincronizar_filiais(sender, instance, **kwargs):
 
 class ContatoCliente(models.Model):
     id = models.AutoField(primary_key=True)
-    filial_id = models.ForeignKey(Filial,
-                                  on_delete=models.CASCADE,
-                                  verbose_name='Filial do Contato')
+    filial = models.ForeignKey(Filial,
+                               on_delete=models.CASCADE,
+                               verbose_name='Filial do Contato')
     nome = models.CharField(max_length=60,
                             verbose_name='Nome')
     fone = models.CharField(max_length=15,
