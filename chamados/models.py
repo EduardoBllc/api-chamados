@@ -203,3 +203,15 @@ class AlteracaoChamado(models.Model):
         db_table = u'chamados_alteracoes'
         verbose_name = 'Alteração de Chamado'
         verbose_name_plural = 'Alterações de Chamado'
+
+
+class TesteModel(models.Model):
+    codigo = models.IntegerField(max_length=10)
+    filial = models.CharField(max_length=3)
+    valor = models.DecimalField(max_digits=5, decimal_places=2)
+    data_cadastro = models.DateField(auto_now=True)
+    data_alteracao = models.DateField(auto_now_add=True)
+
+    class Meta:
+        db_table = u'teste_model'
+        unique_together = (('filial', 'codigo'),)

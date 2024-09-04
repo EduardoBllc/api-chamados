@@ -1,5 +1,5 @@
 # coding=utf-8
-from financeiro.contas_a_receber.entrada_contas_a_receber.objects import ReprAutCto, ReprAutCtp, ReprCtoObs, ReprCtoAdi
+from clientes.objects import InterfaceContatoCliente, InterfaceUsuario
 
 
 class ComponenteBase(object):
@@ -117,10 +117,8 @@ class ObjContrato(InterfaceObjeto):
 
     contrato_complementado = 0
 
-    def __init__(self, filial, codigo, ):
+    def __init__(self, filial):
         self.cabecalho.args = filial
 
-    cabecalho = ComponenteObrigatorio(ReprAutCto)
-    parcelas = ComponenteMultiplo(ReprAutCtp, qtd_minima=1)
-    observacoes = ComponenteCondicional(ReprCtoObs)
-    complementar = ComponenteCondicional(ReprCtoAdi)
+    cabecalho = ComponenteObrigatorio(InterfaceUsuario)
+    parcelas = ComponenteMultiplo(InterfaceContatoCliente, qtd_minima=2)

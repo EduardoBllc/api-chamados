@@ -5,8 +5,6 @@ from django.db.models import Model
 from django.db.models.base import ModelBase
 from django.db.models.fields import IntegerField, FloatField, DecimalField, BooleanField, DateField, DateTimeField
 
-from generico.dbfs import clisockets, Dbf
-from generico.functions_genericas import get_pars_socket
 
 
 def repr_coluna(field_name):
@@ -419,7 +417,7 @@ class MetaInterfaceTabela(type):
                     coluna_model = filter(lambda campo: campo.column == coluna_chave, campos_model)[0]
                 except IndexError:
                     raise ValueError("Coluna '{coluna}' não encontrada no model "
-                                     "'{nome_model}'.".format(coluna=coluna,
+                                     "'{nome_model}'.".format(coluna=coluna_chave,
                                                               nome_model=nome_model))
 
                 valor_coluna = self.objeto_model.__dict__.get(coluna_chave)
